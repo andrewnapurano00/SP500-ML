@@ -51,10 +51,11 @@ assert len(monthly)==provenance['return_months']==68
 fig = plt.figure(figsize=(14, 3.6), facecolor=INK)
 fig.text(.055,.86,'S&P 500  /  FROM DATA TO DECISIONS',color='#7BE0D0',fontsize=12,weight='bold')
 fig.text(.055,.65,'An end-to-end financial ML research project',color='white',fontsize=25,weight='bold')
-for x, value, label in zip([.055,.295,.535,.775], [f"{provenance['research_rows']:,}",str(feature_count),str(provenance['models']),str(provenance['return_months'])], ['stock-months in research','declared predictors','matched model variants','evaluated return months']):
+for x, value, label in zip([.055,.295,.535,.775], [f"{provenance['research_rows']:,}",str(feature_count),str(provenance['models']),'Monthly'], ['stock-level observations','declared predictors','matched model variants','purged walk-forward evaluation']):
     fig.text(x,.34,value,color='white',fontsize=32,weight='bold')
     fig.text(x,.22,label,color='#C1D2E3',fontsize=10)
-fig.text(.055,.065,'Databricks Gold  →  Exploratory analysis  →  Purged rolling validation  →  Private batch candidate',color='#C1D2E3',fontsize=10)
+fig.text(.055,.13,'Each observation is one stock on one signal date; observations are not calendar months.',color='#C1D2E3',fontsize=9)
+fig.text(.055,.035,'Databricks Gold  →  Exploratory analysis  →  Purged rolling validation  →  Private batch candidate',color='#C1D2E3',fontsize=10)
 fig.savefig(OUT/'research_overview.png',dpi=180,facecolor=INK)
 plt.close(fig)
 

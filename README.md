@@ -10,7 +10,9 @@ An end-to-end data-science project investigating whether technical, sector and f
 
 The companion [S&P 500 Market Lakehouse](https://github.com/andrewnapurano00/SP500-Market-Lakehouse) owns ingestion, PostgreSQL migration and governed Databricks data. **This repository owns the research and modeling layer.** It publishes code, aggregate historical results and figures. Market-data rows, security-level predictions, holdings, credentials and fitted estimators remain private.
 
-![Research scope: 52,421 stock-months, 215 predictors, 12 model variants and 68 evaluated return months](docs/figures/readme/research_overview.png)
+![Research scope: 52,421 stock-level observations, 215 predictors, 12 model variants and monthly walk-forward evaluation](docs/figures/readme/research_overview.png)
+
+**Reading the counts:** 52,421 is the number of stock-level observations, not months. The research sample spans 105 monthly signal dates (January 2018–September 2026); after the initial training window and purge, the backtest contains 68 monthly returns (March 2021–October 2026).
 
 **[Model performance](#historical-model-results) · [Explore the EDA](#exploratory-analysis) · [Architecture](#architecture) · [Skills demonstrated](#data-science-skills-demonstrated) · [Deployment roadmap](#deployment-status-and-next-steps)**
 
