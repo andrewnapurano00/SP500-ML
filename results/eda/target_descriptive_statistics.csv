@@ -1,0 +1,17 @@
+Statistic,Next-month stock return
+Stock-months,"52,421"
+Mean,0.99%
+Median,0.94%
+Standard deviation,9.62%
+1st percentile,-23.20%
+5th percentile,-13.44%
+25th percentile,-4.54%
+75th percentile,6.26%
+95th percentile,15.74%
+99th percentile,27.03%
+Minimum,-99.84%
+Maximum,214.16%
+Skewness,0.48
+Positive return rate,54.57%
+Beats VOO rate,47.64%
+Top-20% label rate,20.05%

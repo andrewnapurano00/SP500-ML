@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sp500-ml-research"
+version = "0.1.0"
+description = "Work-in-progress S&P 500 temporal machine-learning research"
+requires-python = ">=3.11"
+dependencies = ["numpy>=2.2,<3", "pandas>=2.2,<4", "scipy>=1.14,<2", "scikit-learn>=1.6,<2", "xgboost>=3,<4", "pyarrow>=14", "matplotlib>=3.9", "threadpoolctl>=3.5", "joblib>=1.4"]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "build>=1.2"]
+notebook = ["jupyterlab>=4", "ipython>=8"]
+lakehouse = ["databricks-sdk>=0.40", "sp500-datalakehouse @ git+https://github.com/andrewnapurano00/SP500-Market-Lakehouse.git@466c79b6e29edaec163edd4965905db4f6839661"]
+
+[project.scripts]
+sp500-ml = "sp500_ml.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+sp500_ml = ["*.json"]

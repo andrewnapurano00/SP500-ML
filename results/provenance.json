@@ -1,0 +1,46 @@
+{
+  "status": "historical development evidence; not public-package rerun certification",
+  "snapshot_id": "refresh_target_basis_v2_20261108",
+  "source_binding_sha256": "39117e31de982ff922cf40f882d461418a3b12a825fa7d91cc1b67d3b259c04e",
+  "as_of": "2026-11-09T00:59:59Z",
+  "packages": {
+    "numpy": "2.2.6",
+    "pandas": "3.0.1",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.8.0",
+    "xgboost": "3.2.0",
+    "pyarrow": "23.0.1"
+  },
+  "original_code_sha256": {
+    "fundamental_model_experiment": "8300e2c6b72553ed4fda93a9c0c619033ca5bdd7517c81c461a3d4935e36c21f",
+    "sector_model_experiment": "27e3540323c13a24c03a706322f05c840d4cb3e825c24adb460a4cf826c2a31c",
+    "research_overview": "014fb198462e263e0de705488500164eb55ded3c114196f14460dceb0777842d",
+    "model_overview": "2c154c11b3a8c73c47e46176faa22ffa37f37993a0e82eb429ce4d974978ec6a",
+    "rerun_lakehouse_research": "27c5750c85ab4954e5184240fadd0af3e1ebcacc8ebce04d4c65b8282b4acd4a",
+    "verify_lakehouse_research_alignment": "2bad42df12a25a1546d17ee360a7d4513394e82bad2cd2cf2759d95e6892b60c"
+  },
+  "aggregate_files_sha256": {
+    "results/eda/annual_signal_stability.csv": "f23f432fddeb0c7f88e91cc6042eb8e1c7fd01574254783c2c39df46e4c84a6c",
+    "results/eda/feature_quintiles.csv": "5126555f7ea40112902a304eefdb43663f12719910de103dc5480c6f87c5ae54",
+    "results/eda/feature_tests.csv": "70d3bc9f83d483c1b91b5c7300cba8b4c4d227eb0d9f2c946c46846365692df0",
+    "results/eda/macro_monthly_correlations.csv": "bc82137f6fee7aeb1691a60a1af34ebede8bcbf7f0de781e94b1b20bb8872cfb",
+    "results/eda/monthly_population.csv": "65b68c2137388b735d00d0096871df4abe22d61bf178e41b63acfa8c80c39cd7",
+    "results/eda/quality_flag_descriptives.csv": "cf403919e852058b40128383def75f7177ca447dc4499e0eac5205cdaa345428",
+    "results/eda/representative_rank_correlations.csv": "cfb119aaa3ad58b52c61c4e7cf339a07eef4568306b4482e3f1965957a6f5be9",
+    "results/eda/target_descriptive_statistics.csv": "5af848c917d4750688051aba438d85c96eda7b2b9f60586dec4c65fcfb0f9c1a",
+    "results/models/calendar_year_returns.csv": "e7a6b499a20caa19ada5fbc10cfa867c080a826c791a83eeb500786a035b8037",
+    "results/models/matched_monthly_returns.csv": "d30d33f151b9c26c1a456d3bed7464e809f7c6b076bcb9ed881ccd244a5f8bd2",
+    "results/models/monthly_results.csv": "82f7126fb09381ab7873d2a1ee54e72ba1af66c007142a6b55e0068d3855c807",
+    "results/models/paired_return_tests.csv": "a77d120757a19bed25e5c7f4c3cddc4724479eafca5c93de5e1ddf432c9f3d2b",
+    "results/models/performance_summary.csv": "ed61771afb902b077221663ff602df8d6626aed9e36f0fb10e03cb615154fd4d",
+    "results/models/training_windows.csv": "f32b73f4ba43067a4559d4aa33eaa6586ae2079156a28f61ded869096d152d49"
+  },
+  "models": 12,
+  "return_months": 68,
+  "first_return_month": "2021-03",
+  "last_return_month": "2026-10",
+  "research_rows": 52421,
+  "research_signal_months": 105,
+  "private_data_distributed": false,
+  "private_weights_distributed": false
+}
