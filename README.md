@@ -1,16 +1,129 @@
 # S&P 500 ML
 
-**WORK IN PROGRESS · Research portfolio · Local deployment candidate**
+**WORK IN PROGRESS · Financial data science · Research & deployment preparation**
 
 [![Research checks](https://github.com/andrewnapurano00/SP500-ML/actions/workflows/ci.yml/badge.svg)](https://github.com/andrewnapurano00/SP500-ML/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-3776AB)
 ![Status](https://img.shields.io/badge/Status-Work%20in%20progress-D99A29)
 
-A data-science project investigating whether technical, sector and financial-statement features can help rank S&P 500 stocks for the following month. It combines executive EDA, time-aware classification, matched feature-family experiments and portfolio evaluation, with a private batch-scoring candidate and a documented path toward deployment.
+An end-to-end data-science project investigating whether technical, sector and financial-statement features can help rank S&P 500 stocks for the following month. It combines executive EDA, time-aware classification, matched feature-family experiments and portfolio evaluation, with a private batch-scoring candidate and a documented path toward deployment.
 
 The companion [S&P 500 Market Lakehouse](https://github.com/andrewnapurano00/SP500-Market-Lakehouse) owns ingestion, PostgreSQL migration and governed Databricks data. **This repository owns the research and modeling layer.** It publishes code, aggregate historical results and figures. Market-data rows, security-level predictions, holdings, credentials and fitted estimators remain private.
 
-> **Current conclusion:** Financial-strength features are a useful research hypothesis. Their apparent historical portfolio advantage is not statistically established. These results are development evidence; the project is not a live investment service or a production-approved model.
+![Research scope: 52,421 stock-months, 215 predictors, 12 model variants and 68 evaluated return months](docs/figures/readme/research_overview.png)
+
+**[Model performance](#historical-model-results) · [Explore the EDA](#exploratory-analysis) · [Architecture](#architecture) · [Skills demonstrated](#data-science-skills-demonstrated) · [Deployment roadmap](#deployment-status-and-next-steps)**
+
+## What this project demonstrates
+
+| A dependable data foundation | In-depth financial research | Reproducible ML engineering |
+| --- | --- | --- |
+| Versioned **Databricks Gold** inputs, historical membership and stable security IDs | **105 signal months**, return-distribution analysis, sector context and factor stability | **36-month rolling training**, one-month purges and training-only transforms |
+| **215 predictors + 35 flags**, with economic applicability preserved | **183 feature screens**, block-bootstrap uncertainty and multiplicity correction | **12 matched model variants**, calibration checks, tests and CI |
+| Source-binding and dataset hashes connect research to the lakehouse | Technical, growth, profitability, valuation and balance-sheet comparisons | A private batch-scoring candidate, artifact checks and a staged deployment roadmap |
+
+The strongest part of the project is the full research process: building trustworthy inputs, asking a defined question, comparing models fairly, and making both the findings and their limits reviewable.
+
+## Historical model results
+
+All figures below use the same **68 return months**, eligible monthly universe and **zero-cost, equal-weight top-30 research policy**. They do not describe the separate frozen model's capped deployment allocations.
+
+### Growth and risk over the full evaluation
+
+![Growth of $100 and drawdowns for financial strength, technical baseline and VOO](docs/figures/readme/performance_path.png)
+
+The financial-strength research portfolio turned **$100 into approximately $302**, versus **$264** for the technical baseline and **$215** for VOO over the matched historical period. These are compounded, zero-cost backtest outcomes; the drawdown panel makes the additional risk visible.
+
+### Performance by year
+
+![Annual compounded returns, with 2021 and 2026 marked as partial years](docs/figures/readme/annual_returns.png)
+
+The financial-strength variant exceeded the technical baseline in **all six displayed annual periods**; VOO led those two strategies in **2021 and 2024**. The strong 2026 result is visible rather than hidden inside a cumulative figure. **2021 covers March–December and 2026 covers January–October**; neither is a full calendar year. These are descriptive comparisons within previously inspected history.
+
+<details>
+<summary><strong>Explore annual performance for all 12 model variants</strong></summary>
+
+![Annual return heatmap for every fitted model variant](docs/figures/readme/all_models_by_year.png)
+
+The complete comparison includes weaker variants as well as stronger ones. Beat-VOO rows train on a separately named classification target; all portfolios use the same equal-weight top-30 research policy. [Download the annual table](results/models/calendar_year_returns.csv).
+
+</details>
+
+### Return, risk and classification quality
+
+| Strategy | Cumulative return | Annualized return | Annualized volatility | Maximum drawdown | Mean monthly top-quintile AUC | Brier score |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Technicals + balance sheet | 202.28% | 21.56% | 27.35% | −30.33% | 0.5776 | 0.1585 |
+| Sector technical baseline | 164.49% | 18.72% | 28.73% | −29.96% | 0.5814 | 0.1582 |
+| VOO | 115.37% | 14.50% | 15.14% | −23.90% | — | — |
+
+The financial-strength portfolio had the highest historical return among these three, while the technical baseline had slightly better classification discrimination and calibration. Both stock-selection portfolios had materially higher volatility and drawdown than VOO. Return ranking and probability quality answer different questions.
+
+Financial strength's mean monthly return difference versus the technical baseline was **+0.17 percentage points**, with 95% block-bootstrap interval **[−0.16, +0.50] percentage points** and p = **0.313**. Versus VOO it was **+0.71 percentage points**, interval **[−0.81, +1.98]**, p = **0.298**. Both had BH q approximately **0.683** across strategy comparisons. **Neither establishes an advantage.**
+
+<details>
+<summary><strong>Inspect feature-family ablations, calibration and AUC stability</strong></summary>
+
+![Feature-family comparison](docs/figures/models/02_family_ablations.png)
+![Calibration diagnostics](docs/figures/models/06_calibration.png)
+![Six-month mean AUC stability](docs/figures/models/05_auc_over_time.png)
+
+</details>
+
+[All model results](results/models/performance_summary.csv) · [Paired tests](results/models/paired_return_tests.csv) · [Annual returns, including partial years](results/models/calendar_year_returns.csv) · [Interpretation and failed controls](docs/MODEL_RESULTS.md)
+
+## Exploratory analysis
+
+The EDA examines population coverage, return distributions, missingness/applicability, technical and financial signals, context, redundancy and stability. Tests use 5,000 paired circular block resamples of three consecutive months, with six-month sensitivity and joint Benjamini–Hochberg correction; dependence-conservative Benjamini–Yekutieli results are also exported.
+
+- Monthly stock returns averaged **0.99%**, with **9.62%** standard deviation. The middle 90% ranged from **−13.44% to +15.74%**; observed tails remain in the analysis.
+- **20.05%** of stock-months were labeled top quintile; **47.64%** beat VOO. Accuracy alone would be misleading for the primary imbalanced target.
+- **183 feature screens / 262 estimable endpoint tests** produced **zero discoveries at adjusted q < 0.05**. Descriptive leaders are hypotheses, not validated trading signals.
+- Trend fit had mean monthly rank association approximately **0.025** and a **0.51 percentage-point** top-minus-bottom quintile spread; adjusted q was **0.296**. Its association weakened in the later period.
+- Average observed coverage of applicable financial-factor sector scores was **92.9%**. Structural exclusions and observed-value flags are analyzed separately.
+- Correlated momentum/trend inputs and unstable factor associations motivate training-only regularization, redundancy checks and regime analysis.
+
+### Understand the target before fitting a model
+
+![Return distribution and monthly market context](docs/figures/eda/02_target.png)
+
+The distribution review preserves the tails in the analysis, distinguishes stock returns from benchmark-relative outcomes, and makes class imbalance explicit. The histogram zooms to the central 98% for readability; the underlying statistics retain all observations.
+
+### Coverage, relationships and stability
+
+Click any chart to open the full-resolution figure.
+
+| Population and eligibility | Feature coverage |
+| --- | --- |
+| [![Historical population and research coverage](docs/figures/eda/01_population.png)](docs/figures/eda/01_population.png) | [![Feature availability over time](docs/figures/eda/03_feature_coverage.png)](docs/figures/eda/03_feature_coverage.png) |
+| Tracks the changing eligible population instead of assuming today's universe. | Separates availability from predictive value and preserves fundamental missingness. |
+
+| Signal redundancy | Stability across years |
+| --- | --- |
+| [![Correlation heatmap](docs/figures/eda/07_correlations.png)](docs/figures/eda/07_correlations.png) | [![Annual signal stability](docs/figures/eda/08_stability.png)](docs/figures/eda/08_stability.png) |
+| Identifies overlapping technical and fundamental information. | Examines changing signal direction rather than relying on one full-period average. |
+
+<details>
+<summary><strong>Open the technical, fundamental and market-context research gallery</strong></summary>
+
+#### Technical signals and uncertainty
+
+![Technical associations and quintile spreads](docs/figures/eda/04_technicals.png)
+
+#### Financial families and individual factors
+
+![Fundamental-family associations](docs/figures/eda/05_fundamental_families.png)
+![Individual fundamental-factor associations](docs/figures/eda/06_fundamental_factors.png)
+
+#### Macro and sector context
+
+![Macro and sector associations at the appropriate inference grain](docs/figures/eda/09_macro_sector_context.png)
+
+These are exploratory associations with pointwise uncertainty intervals. None survives the joint adjusted q < 0.05 screen; the charts motivate further tests rather than establish causal or deployable signals.
+
+</details>
+
+[Detailed EDA interpretation](docs/EDA_RESULTS.md) · [Feature tests](results/eda/feature_tests.csv) · [Annual stability](results/eda/annual_signal_stability.csv)
 
 ## Research question
 
@@ -53,40 +166,6 @@ Gold is the source of truth. The export adapter reads explicit Delta versions an
 
 The 215 warehouse predictors are not every estimator's input width: the financial-strength specification uses 74 transformed inputs. Reversal duplicates are omitted from inferential screening and model design. Missing fundamentals do not trigger a complete-case universe filter.
 
-## EDA findings
-
-The EDA examines population coverage, return distributions, missingness/applicability, technical and financial signals, context, redundancy and stability. Tests use 5,000 paired circular block resamples of three consecutive months, with six-month sensitivity and joint Benjamini–Hochberg correction; dependence-conservative Benjamini–Yekutieli results are also exported.
-
-- Monthly stock returns averaged **0.99%**, with **9.62%** standard deviation. The middle 90% ranged from **−13.44% to +15.74%**; observed tails remain in the analysis.
-- **20.05%** of stock-months were labeled top quintile; **47.64%** beat VOO. Accuracy alone would be misleading for the primary imbalanced target.
-- **183 feature screens / 262 estimable endpoint tests** produced **zero discoveries at adjusted q < 0.05**. Descriptive leaders are hypotheses, not validated trading signals.
-- Trend fit had mean monthly rank association approximately **0.025** and a **0.51 percentage-point** top-minus-bottom quintile spread; adjusted q was **0.296**. Its association weakened in the later period.
-- Average observed coverage of applicable financial-factor sector scores was **92.9%**. Structural exclusions and observed-value flags are analyzed separately.
-- Correlated momentum/trend inputs and unstable factor associations motivate training-only regularization, redundancy checks and regime analysis.
-
-![Feature availability and associations](docs/figures/eda/03_feature_coverage.png)
-
-[Detailed EDA interpretation](docs/EDA_RESULTS.md) · [Feature tests](results/eda/feature_tests.csv) · [Annual stability](results/eda/annual_signal_stability.csv)
-
-## Historical model results
-
-All figures below use the same **68 return months**, eligible monthly universe and **zero-cost, equal-weight top-30 research policy**. They do not describe the separate frozen model's capped deployment allocations.
-
-| Strategy | Cumulative return | Annualized return | Annualized volatility | Maximum drawdown | Mean monthly top-quintile AUC | Brier score |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Technicals + balance sheet | 202.28% | 21.56% | 27.35% | −30.33% | 0.5776 | 0.1585 |
-| Sector technical baseline | 164.49% | 18.72% | 28.73% | −29.96% | 0.5814 | 0.1582 |
-| VOO | 115.37% | 14.50% | 15.14% | −23.90% | — | — |
-
-The financial-strength portfolio had the highest historical return among these three, while the technical baseline had slightly better classification discrimination and calibration. Both stock-selection portfolios had materially higher volatility and drawdown than VOO. Return ranking and probability quality answer different questions.
-
-Financial strength's mean monthly return difference versus the technical baseline was **+0.17 percentage points**, with 95% block-bootstrap interval **[−0.16, +0.50] percentage points** and p = **0.313**. Versus VOO it was **+0.71 percentage points**, interval **[−0.81, +1.98]**, p = **0.298**. Both had BH q approximately **0.683** across strategy comparisons. **Neither establishes an advantage.**
-
-![Historical feature-family comparison](docs/figures/models/02_family_ablations.png)
-![Calibration diagnostics](docs/figures/models/06_calibration.png)
-
-[All model results](results/models/performance_summary.csv) · [Paired tests](results/models/paired_return_tests.csv) · [Annual returns, including partial years](results/models/calendar_year_returns.csv) · [Interpretation and failed controls](docs/MODEL_RESULTS.md)
-
 ## Data-science skills demonstrated
 
 | Skill | Concrete evidence |
@@ -106,6 +185,9 @@ Financial strength's mean monthly return difference versus the technical baselin
 See [skills and evidence](docs/SKILLS.md) for demonstrated work versus planned work.
 
 ## Run locally
+
+<details>
+<summary><strong>Installation, private Gold exports and research reproduction</strong></summary>
 
 Python 3.11 or 3.12. Installation and tests need no vendor API key or private dataset:
 
@@ -131,6 +213,9 @@ The binding comes from the companion lakehouse's verified snapshot registry and 
 Reruns can be expensive and write private per-security outputs into ignored directories. This package is a portable extraction of the original workflow. Historical metrics come from the original validated run, **not a newly certified full retraining of this extracted package**. Library and numerical differences can change selections.
 
 Open [Research.ipynb](notebooks/Research.ipynb) and [Model_Results.ipynb](notebooks/Model_Results.ipynb) to review aggregate evidence without downloading data or training models.
+
+
+</details>
 
 ## Deployment status and next steps
 
